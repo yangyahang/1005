@@ -1,0 +1,2674 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FFF8EC">
+
+  <title>🐱 貓咪情緒翻譯所</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: "#FFF8EC",
+            caramel: "#E89A4A",
+            caramelLight: "#FFD9A8",
+            sage: "#9CAF88",
+            sageLight: "#E8EFE2",
+            coffee: "#5B4636",
+            brownLight: "#8A6D59"
+          },
+          fontFamily: {
+            sans: [
+              '"Microsoft JhengHei"',
+              '"Noto Sans TC"',
+              'sans-serif'
+            ]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top right, rgba(232,154,74,.13), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(156,175,136,.15), transparent 30%),
+        #FFF8EC;
+
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button,
+    select,
+    a {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #E89A4A;
+      outline-offset: 3px;
+    }
+
+    .signal-tab {
+      transition: all .2s ease;
+    }
+
+    .signal-tab.active {
+      background: #E89A4A;
+      color: white;
+      border-color: #E89A4A;
+      box-shadow: 0 8px 20px rgba(232,154,74,.25);
+    }
+
+    .signal-card {
+      transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .signal-card:active {
+      transform: scale(.98);
+    }
+
+    .signal-card.selected {
+      border-color: #E89A4A;
+      box-shadow: 0 0 0 3px rgba(232,154,74,.15);
+    }
+
+    .quiz-option {
+      transition: all .2s ease;
+    }
+
+    .quiz-option.correct {
+      background: #E8EFE2;
+      border-color: #789265;
+      color: #405136;
+    }
+
+    .quiz-option.wrong {
+      background: #FFF0ED;
+      border-color: #D77C6D;
+      color: #8E4034;
+    }
+
+    .fade-in {
+      animation: fadeIn .3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cat-float {
+      animation: catFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes catFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .paw {
+      position: absolute;
+      opacity: .08;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @media (hover:hover) {
+      .signal-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .quiz-option:hover:not(:disabled) {
+        border-color: #E89A4A;
+        background: #FFF8EC;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-coffee">
+
+  <!-- =========================================================
+       頁首
+  ========================================================== -->
+
+  <header
+    class="
+      sticky top-0 z-50
+      bg-cream/95 backdrop-blur
+      border-b border-orange-100
+    "
+  >
+    <div
+      class="
+        max-w-6xl mx-auto
+        px-4 py-3
+        flex items-center justify-between gap-3
+      "
+    >
+      <div class="flex items-center gap-3">
+
+        <div
+          class="
+            w-11 h-11
+            rounded-2xl
+            bg-caramel
+            flex items-center justify-center
+            text-2xl
+            shadow-sm
+          "
+        >
+          🐱
+        </div>
+
+        <div>
+          <h1 class="font-black text-lg sm:text-xl">
+            貓咪情緒翻譯所
+          </h1>
+
+          <p class="text-xs text-brownLight hidden sm:block">
+            觀察身體語言，學習理解貓咪
+          </p>
+        </div>
+
+      </div>
+
+      <a
+        href="#translator"
+        class="
+          flex items-center justify-center
+          rounded-xl
+          bg-coffee
+          text-white
+          px-4 py-2
+          text-sm font-bold
+        "
+      >
+        🔍 開始翻譯
+      </a>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- =======================================================
+         HERO 首頁
+    ======================================================== -->
+
+    <section
+      class="
+        relative overflow-hidden
+        max-w-6xl mx-auto
+        px-4 pt-10 pb-14
+      "
+    >
+
+      <span class="paw text-8xl top-10 right-5">
+        🐾
+      </span>
+
+      <span class="paw text-7xl bottom-4 left-3 rotate-12">
+        🐾
+      </span>
+
+
+      <div
+        class="
+          grid lg:grid-cols-2
+          gap-8
+          items-center
+        "
+      >
+
+        <!-- 左側文字 -->
+
+        <div>
+
+          <div
+            class="
+              inline-flex items-center
+              gap-2
+              bg-sageLight
+              text-coffee
+              rounded-full
+              px-4 py-2
+              text-sm font-bold
+            "
+          >
+            🐾 今天也來學一點喵語
+          </div>
+
+
+          <h2
+            class="
+              mt-5
+              text-4xl sm:text-5xl lg:text-6xl
+              leading-tight
+              font-black
+            "
+          >
+            貓咪
+            <span class="text-caramel">
+              情緒翻譯所
+            </span>
+          </h2>
+
+
+          <p
+            class="
+              mt-4
+              text-xl sm:text-2xl
+              font-bold
+              text-brownLight
+            "
+          >
+            牠不會說話，但牠的身體一直在告訴你答案！
+          </p>
+
+
+          <p
+            class="
+              mt-5
+              max-w-xl
+              text-base sm:text-lg
+              leading-relaxed
+              text-brownLight
+            "
+          >
+            耳朵轉了一下、尾巴開始甩動、眼睛突然睜大……
+            這些小動作都可能是貓咪正在傳遞的訊息。
+            一起觀察耳朵、眼睛、尾巴與身體姿勢，
+            試著理解牠現在可能是什麼心情吧！
+          </p>
+
+
+          <div
+            class="
+              mt-7
+              flex flex-col sm:flex-row
+              gap-3
+            "
+          >
+
+            <a
+              href="#signals"
+              class="
+                flex items-center justify-center
+                rounded-2xl
+                bg-caramel
+                text-white
+                px-6 py-4
+                font-black
+                shadow-lg
+                shadow-orange-200
+              "
+            >
+              🐾 開始認識貓語
+            </a>
+
+            <a
+              href="#quiz"
+              class="
+                flex items-center justify-center
+                rounded-2xl
+                border-2 border-sage
+                bg-white
+                px-6 py-4
+                font-black
+              "
+            >
+              🎯 直接挑戰看看
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <!-- 右側貓咪視覺 -->
+
+        <div
+          class="
+            relative
+            bg-white
+            border border-orange-100
+            rounded-[36px]
+            p-7
+            shadow-xl
+            shadow-orange-100
+          "
+        >
+
+          <div
+            class="
+              cat-float
+              text-center
+              text-[120px] sm:text-[160px]
+              leading-none
+            "
+          >
+            🐱
+          </div>
+
+
+          <div
+            class="
+              mt-4
+              bg-sageLight
+              rounded-2xl
+              p-4
+              text-center
+            "
+          >
+            <p class="font-black text-lg">
+              今天的牠在說什麼？
+            </p>
+
+            <p class="text-sm text-brownLight mt-1">
+              找出身體線索，就能更理解牠的感受。
+            </p>
+          </div>
+
+
+          <div
+            class="
+              grid grid-cols-4
+              gap-2
+              mt-4
+            "
+          >
+
+            <div class="bg-cream rounded-xl p-3 text-center">
+              <div class="text-2xl">👂</div>
+              <p class="text-xs font-bold mt-1">耳朵</p>
+            </div>
+
+            <div class="bg-cream rounded-xl p-3 text-center">
+              <div class="text-2xl">👀</div>
+              <p class="text-xs font-bold mt-1">眼睛</p>
+            </div>
+
+            <div class="bg-cream rounded-xl p-3 text-center">
+              <div class="text-2xl">〰️</div>
+              <p class="text-xs font-bold mt-1">尾巴</p>
+            </div>
+
+            <div class="bg-cream rounded-xl p-3 text-center">
+              <div class="text-2xl">🐈</div>
+              <p class="text-xs font-bold mt-1">姿勢</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         重要觀念
+    ======================================================== -->
+
+    <section class="bg-coffee text-white">
+
+      <div
+        class="
+          max-w-6xl mx-auto
+          px-4 py-8
+          grid sm:grid-cols-[auto_1fr]
+          gap-5 items-center
+        "
+      >
+
+        <div
+          class="
+            w-16 h-16
+            rounded-2xl
+            bg-white/10
+            flex items-center justify-center
+            text-3xl
+          "
+        >
+          💡
+        </div>
+
+
+        <div>
+
+          <h3 class="text-xl font-black">
+            先記住：一個動作 ≠ 一種固定情緒
+          </h3>
+
+          <p
+            class="
+              mt-2
+              text-sm sm:text-base
+              text-orange-50/80
+              leading-relaxed
+            "
+          >
+            貓咪的同一個動作可能有不同原因。
+            判斷時要一起觀察耳朵、眼睛、尾巴、
+            身體姿勢以及當時發生了什麼。
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         身體訊號觀察
+    ======================================================== -->
+
+    <section
+      id="signals"
+      class="
+        max-w-6xl mx-auto
+        px-4 py-14
+        scroll-mt-24
+      "
+    >
+
+      <div class="text-center">
+
+        <span
+          class="
+            text-sm font-black
+            tracking-widest
+            text-caramel
+          "
+        >
+          STEP 1
+        </span>
+
+        <h2
+          class="
+            mt-2
+            text-3xl sm:text-4xl
+            font-black
+          "
+        >
+          貓咪哪裡在說話？
+        </h2>
+
+        <p class="mt-3 text-brownLight">
+          選擇一個部位，看看不同動作可能透露哪些訊息。
+        </p>
+
+      </div>
+
+
+      <!-- 分類按鈕 -->
+
+      <div
+        class="
+          mt-8
+          grid grid-cols-2
+          md:grid-cols-4
+          gap-3
+        "
+      >
+
+        <button
+          type="button"
+          class="
+            signal-tab active
+            rounded-2xl
+            border-2 border-orange-100
+            bg-white
+            p-4
+            font-black
+          "
+          onclick="changeSignalCategory('ears', this)"
+        >
+          <span class="text-3xl block mb-1">👂</span>
+          耳朵
+        </button>
+
+
+        <button
+          type="button"
+          class="
+            signal-tab
+            rounded-2xl
+            border-2 border-orange-100
+            bg-white
+            p-4
+            font-black
+          "
+          onclick="changeSignalCategory('eyes', this)"
+        >
+          <span class="text-3xl block mb-1">👀</span>
+          眼睛
+        </button>
+
+
+        <button
+          type="button"
+          class="
+            signal-tab
+            rounded-2xl
+            border-2 border-orange-100
+            bg-white
+            p-4
+            font-black
+          "
+          onclick="changeSignalCategory('tail', this)"
+        >
+          <span class="text-3xl block mb-1">〰️</span>
+          尾巴
+        </button>
+
+
+        <button
+          type="button"
+          class="
+            signal-tab
+            rounded-2xl
+            border-2 border-orange-100
+            bg-white
+            p-4
+            font-black
+          "
+          onclick="changeSignalCategory('body', this)"
+        >
+          <span class="text-3xl block mb-1">🐈</span>
+          身體姿勢
+        </button>
+
+      </div>
+
+
+      <!-- 卡片與詳細說明 -->
+
+      <div
+        class="
+          mt-7
+          grid lg:grid-cols-[1.25fr_.75fr]
+          gap-5
+        "
+      >
+
+        <div
+          id="signalCards"
+          class="
+            grid sm:grid-cols-2
+            gap-4
+          "
+        >
+        </div>
+
+
+        <div
+          id="signalDetail"
+          class="
+            bg-white
+            rounded-3xl
+            border border-orange-100
+            p-6
+            shadow-lg
+            shadow-orange-100/60
+          "
+        >
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         情緒翻譯器
+    ======================================================== -->
+
+    <section
+      id="translator"
+      class="
+        bg-sageLight
+        scroll-mt-24
+      "
+    >
+
+      <div
+        class="
+          max-w-6xl mx-auto
+          px-4 py-14
+        "
+      >
+
+        <div class="text-center">
+
+          <span
+            class="
+              text-sm font-black
+              tracking-widest
+              text-caramel
+            "
+          >
+            STEP 2
+          </span>
+
+          <h2
+            class="
+              mt-2
+              text-3xl sm:text-4xl
+              font-black
+            "
+          >
+            🔍 貓咪情緒翻譯器
+          </h2>
+
+          <p class="mt-3 text-brownLight">
+            把你觀察到的四種線索放進翻譯器，看看牠可能正在表達什麼。
+          </p>
+
+        </div>
+
+
+        <div
+          class="
+            mt-8
+            bg-white
+            rounded-[32px]
+            p-5 sm:p-8
+            shadow-xl
+          "
+        >
+
+          <div
+            class="
+              grid sm:grid-cols-2 lg:grid-cols-4
+              gap-4
+            "
+          >
+
+            <!-- 耳朵 -->
+
+            <label class="block">
+
+              <span class="font-black flex items-center gap-2 mb-2">
+                👂 耳朵
+              </span>
+
+              <select
+                id="earSelect"
+                class="
+                  w-full
+                  rounded-xl
+                  border-2 border-orange-100
+                  bg-cream
+                  px-3 py-3
+                  font-bold
+                "
+              >
+                <option value="relaxed">自然向前</option>
+                <option value="side">轉向側邊</option>
+                <option value="back">向後壓</option>
+                <option value="flat">完全貼平</option>
+              </select>
+
+            </label>
+
+
+            <!-- 眼睛 -->
+
+            <label class="block">
+
+              <span class="font-black flex items-center gap-2 mb-2">
+                👀 眼睛
+              </span>
+
+              <select
+                id="eyeSelect"
+                class="
+                  w-full
+                  rounded-xl
+                  border-2 border-orange-100
+                  bg-cream
+                  px-3 py-3
+                  font-bold
+                "
+              >
+                <option value="slowblink">慢慢眨眼</option>
+                <option value="normal">瞳孔自然</option>
+                <option value="wide">瞳孔明顯放大</option>
+                <option value="stare">持續凝視</option>
+              </select>
+
+            </label>
+
+
+            <!-- 尾巴 -->
+
+            <label class="block">
+
+              <span class="font-black flex items-center gap-2 mb-2">
+                〰️ 尾巴
+              </span>
+
+              <select
+                id="tailSelect"
+                class="
+                  w-full
+                  rounded-xl
+                  border-2 border-orange-100
+                  bg-cream
+                  px-3 py-3
+                  font-bold
+                "
+              >
+                <option value="up">直直豎起</option>
+                <option value="soft">輕柔擺動</option>
+                <option value="fast">快速左右甩動</option>
+                <option value="puff">炸毛</option>
+                <option value="low">夾低</option>
+              </select>
+
+            </label>
+
+
+            <!-- 身體 -->
+
+            <label class="block">
+
+              <span class="font-black flex items-center gap-2 mb-2">
+                🐈 身體姿勢
+              </span>
+
+              <select
+                id="bodySelect"
+                class="
+                  w-full
+                  rounded-xl
+                  border-2 border-orange-100
+                  bg-cream
+                  px-3 py-3
+                  font-bold
+                "
+              >
+                <option value="relaxed">自然站立／躺下</option>
+                <option value="stretch">側躺或舒展</option>
+                <option value="low">身體壓低、縮起</option>
+                <option value="arch">拱背並炸毛</option>
+                <option value="stiff">身體僵硬</option>
+              </select>
+
+            </label>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="
+              mt-6
+              w-full
+              rounded-2xl
+              bg-caramel
+              text-white
+              px-6 py-4
+              text-lg
+              font-black
+              shadow-lg
+              shadow-orange-200
+              active:scale-[.99]
+              transition
+            "
+            onclick="translateCatEmotion(this)"
+          >
+            🐾 開始翻譯貓咪情緒
+          </button>
+
+
+          <!-- 翻譯結果 -->
+
+          <div
+            id="translationResult"
+            class="hidden mt-6"
+          >
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         情境測驗
+    ======================================================== -->
+
+    <section
+      id="quiz"
+      class="
+        max-w-5xl mx-auto
+        px-4 py-14
+        scroll-mt-24
+      "
+    >
+
+      <div class="text-center">
+
+        <span
+          class="
+            text-sm font-black
+            tracking-widest
+            text-caramel
+          "
+        >
+          STEP 3
+        </span>
+
+        <h2
+          class="
+            mt-2
+            text-3xl sm:text-4xl
+            font-black
+          "
+        >
+          🎯 你真的懂喵嗎？
+        </h2>
+
+        <p class="mt-3 text-brownLight">
+          看看真實互動情境，你會怎麼回應貓咪？
+        </p>
+
+      </div>
+
+
+      <!-- 測驗進度 -->
+
+      <div
+        class="
+          mt-8
+          bg-white
+          rounded-2xl
+          border border-orange-100
+          p-4
+        "
+      >
+
+        <div
+          class="
+            flex justify-between
+            gap-3
+            text-sm font-black
+          "
+        >
+          <span id="quizProgressText">
+            第 1 / 3 題
+          </span>
+
+          <span
+            id="quizScore"
+            class="text-caramel"
+          >
+            得分 0
+          </span>
+        </div>
+
+
+        <div
+          class="
+            mt-3
+            h-3
+            bg-orange-100
+            rounded-full
+            overflow-hidden
+          "
+        >
+          <div
+            id="quizProgressBar"
+            class="
+              h-full
+              bg-caramel
+              transition-all
+              duration-300
+            "
+            style="width:33.33%"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <div
+        id="quizCard"
+        class="
+          mt-5
+          bg-white
+          rounded-[32px]
+          border border-orange-100
+          p-5 sm:p-8
+          shadow-xl
+          shadow-orange-100/60
+        "
+      >
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         最後提醒
+    ======================================================== -->
+
+    <section
+      class="
+        bg-coffee
+        text-white
+      "
+    >
+
+      <div
+        class="
+          max-w-5xl mx-auto
+          px-4 py-12
+          text-center
+        "
+      >
+
+        <div class="text-5xl">
+          🐾
+        </div>
+
+        <h2
+          class="
+            mt-4
+            text-2xl sm:text-3xl
+            font-black
+          "
+        >
+          看懂訊號，也要尊重牠的選擇
+        </h2>
+
+        <p
+          class="
+            mt-4
+            max-w-2xl
+            mx-auto
+            text-orange-50/80
+            leading-relaxed
+          "
+        >
+          貓咪的肢體語言不是固定公式。
+          同一個動作在不同環境中可能代表不同感受。
+          多觀察幾個訊號、尊重牠是否願意互動，
+          才是理解貓咪最重要的一步。
+        </p>
+
+
+        <div
+          class="
+            mt-7
+            grid sm:grid-cols-3
+            gap-3
+          "
+        >
+
+          <div class="bg-white/10 rounded-2xl p-4">
+            <div class="text-2xl">🚫</div>
+            <p class="font-black mt-2">不強行抱牠</p>
+          </div>
+
+          <div class="bg-white/10 rounded-2xl p-4">
+            <div class="text-2xl">🤲</div>
+            <p class="font-black mt-2">尊重互動意願</p>
+          </div>
+
+          <div class="bg-white/10 rounded-2xl p-4">
+            <div class="text-2xl">👀</div>
+            <p class="font-black mt-2">觀察多個訊號</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       Footer
+  ========================================================== -->
+
+  <footer
+    class="
+      bg-[#46362B]
+      text-orange-50/60
+      text-center
+      px-4 py-7
+      text-xs
+    "
+  >
+    <p class="font-bold text-orange-50">
+      🐱 貓咪情緒翻譯所
+    </p>
+
+    <p class="mt-2">
+      本網頁內容用於認識常見貓咪肢體語言，
+      實際情緒仍需依個體差異與當下情境綜合判斷。
+    </p>
+  </footer>
+
+
+  <script>
+
+    /* =========================================================
+       1. 貓咪肢體語言資料庫
+    ========================================================== */
+
+    const catEmotionDB = {
+
+      ears: {
+        title: "耳朵",
+        icon: "👂",
+        intro: "耳朵的方向，常能透露貓咪正在注意什麼。",
+
+        items: [
+          {
+            id: "ear-forward",
+            icon: "🐱",
+            name: "耳朵自然向前",
+            short: "可能放鬆、友善",
+            clue: "兩隻耳朵自然朝前，沒有緊貼頭部。",
+            emotion: "可能代表貓咪目前較放鬆，也可能正對眼前的人事物感到好奇。",
+            action: "可以保持輕柔互動，但仍要觀察尾巴、眼睛與身體是否同樣放鬆。"
+          },
+
+          {
+            id: "ear-side",
+            icon: "😺",
+            name: "耳朵轉向側邊",
+            short: "正在注意、觀察",
+            clue: "耳朵轉往左右不同方向，像雷達一樣尋找聲音。",
+            emotion: "可能只是正在注意環境中的聲音，也可能開始對周圍刺激提高警覺。",
+            action: "先看看周圍是不是出現新的聲音或動靜，不需要急著接近牠。"
+          },
+
+          {
+            id: "ear-back",
+            icon: "😾",
+            name: "耳朵向後壓",
+            short: "可能緊張、不舒服",
+            clue: "耳朵逐漸向後轉，靠近頭部。",
+            emotion: "可能代表貓咪開始緊張、不耐煩，或不希望目前的互動繼續。",
+            action: "如果正在撫摸牠，可以先暫停，給牠一點空間並觀察後續反應。"
+          },
+
+          {
+            id: "ear-flat",
+            icon: "🙀",
+            name: "耳朵完全貼平",
+            short: "可能害怕、高度警戒",
+            clue: "耳朵明顯向後並緊貼頭部。",
+            emotion: "若同時伴隨拱背、炸毛或低吼，可能表示高度害怕或進入防禦狀態。",
+            action: "不要強行摸或抱牠，保持距離並讓牠擁有可以離開或躲藏的空間。"
+          }
+        ]
+      },
+
+
+      eyes: {
+        title: "眼睛",
+        icon: "👀",
+        intro: "眼睛和瞳孔會受到情緒、光線與注意力影響。",
+
+        items: [
+          {
+            id: "eye-slow",
+            icon: "😽",
+            name: "慢慢眨眼",
+            short: "可能放鬆、信任",
+            clue: "眼睛緩慢閉起，再慢慢睜開。",
+            emotion: "在放鬆情境中，慢眨眼通常與安心、信任有關。",
+            action: "可以保持安靜，也可以試著輕輕慢眨眼回應牠。"
+          },
+
+          {
+            id: "eye-normal",
+            icon: "🐱",
+            name: "瞳孔自然",
+            short: "情緒可能較平穩",
+            clue: "瞳孔大小與當時光線相符，眼神沒有明顯緊繃。",
+            emotion: "若身體與尾巴也放鬆，通常表示目前狀態相對平穩。",
+            action: "持續觀察其他身體訊號，再決定是否進一步互動。"
+          },
+
+          {
+            id: "eye-wide",
+            icon: "🙀",
+            name: "瞳孔明顯放大",
+            short: "興奮、害怕或緊張",
+            clue: "瞳孔突然變得很大，眼睛看起來圓圓的。",
+            emotion: "瞳孔放大可能來自興奮、玩耍、害怕、緊張，也可能受到光線影響。",
+            action: "不要只靠瞳孔判斷，應一起觀察耳朵、尾巴與當下環境。"
+          },
+
+          {
+            id: "eye-stare",
+            icon: "😼",
+            name: "持續凝視",
+            short: "高度專注或警戒",
+            clue: "長時間盯著某個人、動物或物體。",
+            emotion: "可能正在追蹤獵物、專注觀察，也可能對某個刺激保持警戒。",
+            action: "先找出牠正在看什麼，避免突然伸手靠近或做出快速動作。"
+          }
+        ]
+      },
+
+
+      tail: {
+        title: "尾巴",
+        icon: "〰️",
+        intro: "尾巴的高度、速度與蓬鬆程度，都是重要線索。",
+
+        items: [
+          {
+            id: "tail-up",
+            icon: "😺",
+            name: "尾巴直直豎起",
+            short: "可能友善、放鬆",
+            clue: "尾巴向上豎起，身體姿勢自然。",
+            emotion: "常出現在貓咪友善接近熟悉的人或環境時。",
+            action: "可以讓牠主動靠近，再依牠的反應決定是否互動。"
+          },
+
+          {
+            id: "tail-soft",
+            icon: "🐈",
+            name: "尾巴輕柔擺動",
+            short: "正在觀察、專注",
+            clue: "尾巴緩慢、小幅度地移動。",
+            emotion: "可能正在觀察某個物體或集中注意力。",
+            action: "先看看牠正在注意什麼，不要突然打斷牠。"
+          },
+
+          {
+            id: "tail-fast",
+            icon: "😾",
+            name: "尾巴快速左右甩動",
+            short: "可能煩躁、不耐煩",
+            clue: "尾巴快速、大幅度地左右甩動。",
+            emotion: "可能代表受到過度刺激、開始不耐煩或情緒較激動。",
+            action: "如果正在摸牠，建議先停止，讓牠自己決定是否繼續互動。"
+          },
+
+          {
+            id: "tail-puff",
+            icon: "🙀",
+            name: "尾巴炸毛",
+            short: "可能驚嚇、防禦",
+            clue: "尾巴突然變得非常蓬鬆，看起來比平常粗很多。",
+            emotion: "可能受到驚嚇或感受到威脅，身體正在準備應對危險。",
+            action: "保持距離，不要追逐或堵住牠的退路。"
+          },
+
+          {
+            id: "tail-low",
+            icon: "😿",
+            name: "尾巴夾低",
+            short: "可能害怕、緊張",
+            clue: "尾巴位置很低，甚至靠近或夾在身體下方。",
+            emotion: "若同時身體壓低、耳朵向後，可能代表牠感到不安。",
+            action: "降低環境刺激，給牠安靜、安全且可以躲藏的空間。"
+          }
+        ]
+      },
+
+
+      body: {
+        title: "身體姿勢",
+        icon: "🐈",
+        intro: "整體姿勢能幫助我們確認其他小線索代表什麼。",
+
+        items: [
+          {
+            id: "body-relaxed",
+            icon: "😺",
+            name: "自然站立／躺下",
+            short: "可能較放鬆",
+            clue: "肌肉沒有明顯緊繃，姿勢自然。",
+            emotion: "如果耳朵、眼睛和尾巴也自然，通常表示目前比較安心。",
+            action: "可以保持溫和互動，讓貓咪自己決定是否靠近。"
+          },
+
+          {
+            id: "body-stretch",
+            icon: "😸",
+            name: "側躺或舒展",
+            short: "可能感到安心",
+            clue: "身體自然伸展，沒有縮緊或準備逃跑的姿勢。",
+            emotion: "在安全環境中，可能代表牠對周遭感到比較安心。",
+            action: "不要因為露出肚子就直接摸肚子，仍應尊重個別貓咪的喜好。"
+          },
+
+          {
+            id: "body-low",
+            icon: "😿",
+            name: "身體壓低、縮起",
+            short: "可能緊張、害怕",
+            clue: "身體貼近地面，四肢收緊，整體看起來縮小。",
+            emotion: "可能正在試圖降低存在感，或準備尋找逃離機會。",
+            action: "避免逼近牠，並確保牠有可以安全離開的路線。"
+          },
+
+          {
+            id: "body-arch",
+            icon: "🙀",
+            name: "拱背並炸毛",
+            short: "可能受到驚嚇",
+            clue: "背部拱起，身體與尾巴的毛可能同時豎起。",
+            emotion: "可能受到威脅或驚嚇，正在試圖讓自己看起來更大。",
+            action: "不要伸手觸碰，保持距離並減少周圍刺激。"
+          },
+
+          {
+            id: "body-stiff",
+            icon: "😾",
+            name: "身體僵硬",
+            short: "可能高度警戒",
+            clue: "身體突然不動，肌肉看起來明顯緊繃。",
+            emotion: "可能正在評估眼前的刺激，準備逃跑、防禦或做出下一步反應。",
+            action: "避免突然動作，先給牠時間觀察與選擇。"
+          }
+        ]
+      }
+
+    };
+
+
+    /* =========================================================
+       2. 情境測驗資料
+    ========================================================== */
+
+    const quizDB = [
+
+      {
+        icon: "🐈",
+        scene: "撫摸中的貓咪",
+
+        question:
+          "你正在摸一隻貓，牠原本很放鬆，但突然開始快速甩尾巴，耳朵也慢慢轉向後方。你現在應該怎麼做？",
+
+        options: [
+          "繼續摸，牠只是很開心",
+          "趕快把牠抱起來",
+          "暫停撫摸，給牠一些空間"
+        ],
+
+        answer: 2,
+
+        explanation:
+          "快速甩尾搭配耳朵向後，可能表示貓咪開始不耐煩或受到過度刺激。這時先停止互動，讓牠自己決定是否離開會比較合適。"
+      },
+
+
+      {
+        icon: "😺",
+        scene: "主動靠近你的貓咪",
+
+        question:
+          "一隻貓主動走向你，尾巴直直豎起，耳朵自然向前，身體看起來也很放鬆。牠可能正在表達什麼？",
+
+        options: [
+          "高度害怕，準備逃跑",
+          "可能友善地接近或打招呼",
+          "一定準備攻擊你"
+        ],
+
+        answer: 1,
+
+        explanation:
+          "尾巴豎起、耳朵自然向前，再搭配放鬆的身體姿勢，通常是比較友善的訊號。不過仍然建議讓貓咪主動決定是否進一步接觸。"
+      },
+
+
+      {
+        icon: "🙀",
+        scene: "遇到陌生貓咪",
+
+        question:
+          "你看到一隻陌生貓咪身體壓低、瞳孔放大，耳朵也向後貼。這時最適合怎麼做？",
+
+        options: [
+          "立刻伸手摸牠，讓牠知道你沒有惡意",
+          "把牠抱起來安慰",
+          "保持距離，讓牠有離開或躲藏的空間"
+        ],
+
+        answer: 2,
+
+        explanation:
+          "身體壓低、耳朵向後與瞳孔放大同時出現時，可能表示牠正在害怕或高度緊張。保持距離、減少壓力通常會比主動觸碰更適合。"
+      }
+
+    ];
+
+
+    /* =========================================================
+       3. 網頁狀態
+    ========================================================== */
+
+    let currentCategory = "ears";
+
+    let currentQuiz = 0;
+
+    let quizScore = 0;
+
+    let quizAnswered = false;
+
+
+    /* =========================================================
+       4. 網頁初始化
+    ========================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        renderSignalCards();
+
+        renderQuiz();
+
+      }
+    );
+
+
+    /* =========================================================
+       5. 切換耳朵／眼睛／尾巴／姿勢
+    ========================================================== */
+
+    function changeSignalCategory(
+      category,
+      element
+    ) {
+
+      currentCategory = category;
+
+
+      document
+        .querySelectorAll(".signal-tab")
+        .forEach(
+          function (button) {
+
+            button.classList.remove("active");
+
+          }
+        );
+
+
+      element.classList.add("active");
+
+
+      renderSignalCards();
+
+    }
+
+
+    /* =========================================================
+       6. 產生身體訊號卡片
+    ========================================================== */
+
+    function renderSignalCards() {
+
+      const container =
+        document.getElementById("signalCards");
+
+      const category =
+        catEmotionDB[currentCategory];
+
+
+      container.innerHTML = "";
+
+
+      category.items.forEach(
+        function (item, index) {
+
+          const button =
+            document.createElement("button");
+
+
+          button.type = "button";
+
+
+          button.className =
+            "signal-card text-left bg-white border-2 border-orange-100 rounded-3xl p-5";
+
+
+          if (index === 0) {
+
+            button.classList.add("selected");
+
+          }
+
+
+          button.innerHTML = `
+
+            <div
+              class="
+                flex
+                items-start
+                gap-4
+              "
+            >
+
+              <div
+                class="
+                  shrink-0
+                  w-14 h-14
+                  rounded-2xl
+                  bg-cream
+                  flex items-center justify-center
+                  text-3xl
+                "
+              >
+                ${item.icon}
+              </div>
+
+
+              <div>
+
+                <h3
+                  class="
+                    text-lg
+                    font-black
+                  "
+                >
+                  ${item.name}
+                </h3>
+
+                <p
+                  class="
+                    mt-1
+                    text-sm
+                    font-bold
+                    text-caramel
+                  "
+                >
+                  ${item.short}
+                </p>
+
+                <p
+                  class="
+                    mt-2
+                    text-xs
+                    text-brownLight
+                  "
+                >
+                  點我查看詳細線索 →
+                </p>
+
+              </div>
+
+            </div>
+
+          `;
+
+
+          button.addEventListener(
+            "click",
+            function () {
+
+              selectSignal(
+                item,
+                button
+              );
+
+            }
+          );
+
+
+          container.appendChild(button);
+
+        }
+      );
+
+
+      /* 預設顯示第一張 */
+      showSignalDetail(
+        category.items[0]
+      );
+
+    }
+
+
+    /* =========================================================
+       7. 選擇一個身體訊號
+    ========================================================== */
+
+    function selectSignal(
+      item,
+      element
+    ) {
+
+      document
+        .querySelectorAll(".signal-card")
+        .forEach(
+          function (card) {
+
+            card.classList.remove("selected");
+
+          }
+        );
+
+
+      element.classList.add("selected");
+
+
+      showSignalDetail(item);
+
+    }
+
+
+    /* =========================================================
+       8. 顯示詳細解釋
+    ========================================================== */
+
+    function showSignalDetail(item) {
+
+      const panel =
+        document.getElementById("signalDetail");
+
+
+      panel.innerHTML = `
+
+        <div class="fade-in">
+
+          <div
+            class="
+              flex items-center gap-3
+            "
+          >
+
+            <div
+              class="
+                w-14 h-14
+                rounded-2xl
+                bg-caramelLight
+                flex items-center justify-center
+                text-3xl
+              "
+            >
+              ${item.icon}
+            </div>
+
+            <div>
+
+              <p
+                class="
+                  text-xs
+                  font-black
+                  text-caramel
+                  tracking-widest
+                "
+              >
+                目前選擇
+              </p>
+
+              <h3
+                class="
+                  text-2xl
+                  font-black
+                "
+              >
+                ${item.name}
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div class="mt-6 space-y-4">
+
+            <div
+              class="
+                bg-cream
+                rounded-2xl
+                p-4
+              "
+            >
+              <h4 class="font-black">
+                🔍 你觀察到的線索
+              </h4>
+
+              <p
+                class="
+                  mt-2
+                  text-sm
+                  leading-relaxed
+                  text-brownLight
+                "
+              >
+                ${item.clue}
+              </p>
+            </div>
+
+
+            <div
+              class="
+                bg-sageLight
+                rounded-2xl
+                p-4
+              "
+            >
+              <h4 class="font-black">
+                💭 可能代表什麼？
+              </h4>
+
+              <p
+                class="
+                  mt-2
+                  text-sm
+                  leading-relaxed
+                  text-brownLight
+                "
+              >
+                ${item.emotion}
+              </p>
+            </div>
+
+
+            <div
+              class="
+                bg-caramelLight/50
+                rounded-2xl
+                p-4
+              "
+            >
+              <h4 class="font-black">
+                ❤️ 現在可以怎麼做？
+              </h4>
+
+              <p
+                class="
+                  mt-2
+                  text-sm
+                  leading-relaxed
+                  text-brownLight
+                "
+              >
+                ${item.action}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       9. 貓咪情緒翻譯器
+       ---------------------------------------------------------
+       使用簡單的分數機制：
+       positive = 放鬆／友善
+       stress   = 緊張／壓力
+       fear     = 害怕／高度警戒
+       focus    = 專注／觀察
+    ========================================================== */
+
+    function translateCatEmotion(element) {
+
+      const ear =
+        document.getElementById("earSelect").value;
+
+      const eye =
+        document.getElementById("eyeSelect").value;
+
+      const tail =
+        document.getElementById("tailSelect").value;
+
+      const body =
+        document.getElementById("bodySelect").value;
+
+
+      let positive = 0;
+      let stress = 0;
+      let fear = 0;
+      let focus = 0;
+
+
+      /* 耳朵判定 */
+
+      if (ear === "relaxed") {
+        positive += 2;
+      }
+
+      if (ear === "side") {
+        focus += 2;
+      }
+
+      if (ear === "back") {
+        stress += 2;
+      }
+
+      if (ear === "flat") {
+        fear += 3;
+      }
+
+
+      /* 眼睛判定 */
+
+      if (eye === "slowblink") {
+        positive += 3;
+      }
+
+      if (eye === "normal") {
+        positive += 1;
+      }
+
+      if (eye === "wide") {
+        stress += 1;
+        fear += 1;
+      }
+
+      if (eye === "stare") {
+        focus += 2;
+        stress += 1;
+      }
+
+
+      /* 尾巴判定 */
+
+      if (tail === "up") {
+        positive += 3;
+      }
+
+      if (tail === "soft") {
+        focus += 2;
+      }
+
+      if (tail === "fast") {
+        stress += 3;
+      }
+
+      if (tail === "puff") {
+        fear += 4;
+      }
+
+      if (tail === "low") {
+        fear += 2;
+        stress += 1;
+      }
+
+
+      /* 身體姿勢 */
+
+      if (body === "relaxed") {
+        positive += 2;
+      }
+
+      if (body === "stretch") {
+        positive += 3;
+      }
+
+      if (body === "low") {
+        fear += 2;
+        stress += 1;
+      }
+
+      if (body === "arch") {
+        fear += 4;
+      }
+
+      if (body === "stiff") {
+        stress += 2;
+        focus += 1;
+      }
+
+
+      const scores = {
+        positive: positive,
+        stress: stress,
+        fear: fear,
+        focus: focus
+      };
+
+
+      let resultType = "positive";
+
+      let maxScore = positive;
+
+
+      Object.keys(scores).forEach(
+        function (key) {
+
+          if (scores[key] > maxScore) {
+
+            maxScore = scores[key];
+
+            resultType = key;
+
+          }
+
+        }
+      );
+
+
+      showTranslationResult(
+        resultType,
+        ear,
+        eye,
+        tail,
+        body
+      );
+
+    }
+
+
+    /* =========================================================
+       10. 翻譯結果
+    ========================================================== */
+
+    function showTranslationResult(
+      type,
+      ear,
+      eye,
+      tail,
+      body
+    ) {
+
+      const result =
+        document.getElementById("translationResult");
+
+
+      const resultData = {
+
+        positive: {
+          emoji: "😺",
+          title: "可能正在放鬆、感到安心",
+          color: "bg-sageLight",
+          advice:
+            "目前多個訊號偏向放鬆。可以讓貓咪主動決定是否靠近或繼續互動，仍要留意牠之後是否出現不耐煩的訊號。"
+        },
+
+        stress: {
+          emoji: "😾",
+          title: "可能開始煩躁或感到壓力",
+          color: "bg-orange-50",
+          advice:
+            "可以先停止撫摸或其他刺激，降低聲音與動作，讓牠有一點自己的空間。"
+        },
+
+        fear: {
+          emoji: "🙀",
+          title: "可能正在害怕／高度警戒",
+          color: "bg-red-50",
+          advice:
+            "先保持適當距離，不要強行觸摸或抱起牠，也不要堵住退路，讓牠有自行離開或躲藏的空間。"
+        },
+
+        focus: {
+          emoji: "😼",
+          title: "可能正在專注觀察",
+          color: "bg-blue-50",
+          advice:
+            "牠可能正在注意聲音、獵物或環境變化。可以先不要打斷牠，觀察牠正在注意什麼。"
+        }
+
+      };
+
+
+      const data =
+        resultData[type];
+
+
+      const labels = {
+
+        ear: {
+          relaxed: "耳朵自然向前",
+          side: "耳朵轉向側邊",
+          back: "耳朵向後壓",
+          flat: "耳朵完全貼平"
+        },
+
+        eye: {
+          slowblink: "慢慢眨眼",
+          normal: "瞳孔自然",
+          wide: "瞳孔明顯放大",
+          stare: "持續凝視"
+        },
+
+        tail: {
+          up: "尾巴直直豎起",
+          soft: "尾巴輕柔擺動",
+          fast: "尾巴快速左右甩動",
+          puff: "尾巴炸毛",
+          low: "尾巴夾低"
+        },
+
+        body: {
+          relaxed: "自然站立／躺下",
+          stretch: "側躺或舒展",
+          low: "身體壓低、縮起",
+          arch: "拱背並炸毛",
+          stiff: "身體僵硬"
+        }
+
+      };
+
+
+      result.classList.remove("hidden");
+
+
+      result.innerHTML = `
+
+        <div
+          class="
+            fade-in
+            ${data.color}
+            border-2 border-white
+            rounded-3xl
+            p-5 sm:p-7
+          "
+        >
+
+          <div
+            class="
+              flex flex-col sm:flex-row
+              sm:items-center
+              gap-4
+            "
+          >
+
+            <div
+              class="
+                text-6xl
+              "
+            >
+              ${data.emoji}
+            </div>
+
+
+            <div>
+
+              <p
+                class="
+                  text-sm
+                  font-black
+                  text-caramel
+                "
+              >
+                翻譯結果
+              </p>
+
+              <h3
+                class="
+                  mt-1
+                  text-2xl sm:text-3xl
+                  font-black
+                "
+              >
+                ${data.title}
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="
+              mt-6
+              bg-white/80
+              rounded-2xl
+              p-4
+            "
+          >
+
+            <h4 class="font-black">
+              🐾 你觀察到的線索
+            </h4>
+
+            <div
+              class="
+                mt-3
+                grid sm:grid-cols-2
+                gap-2
+                text-sm
+              "
+            >
+
+              <p>👂 ${labels.ear[ear]}</p>
+              <p>👀 ${labels.eye[eye]}</p>
+              <p>〰️ ${labels.tail[tail]}</p>
+              <p>🐈 ${labels.body[body]}</p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="
+              mt-4
+              bg-white/80
+              rounded-2xl
+              p-4
+            "
+          >
+
+            <h4 class="font-black">
+              ❤️ 現在可以怎麼做？
+            </h4>
+
+            <p
+              class="
+                mt-2
+                leading-relaxed
+                text-brownLight
+              "
+            >
+              ${data.advice}
+            </p>
+
+          </div>
+
+
+          <p
+            class="
+              mt-4
+              text-xs
+              leading-relaxed
+              text-brownLight
+            "
+          >
+            ※ 這是依照常見肢體語言提供的可能判斷，
+            並不是對每一隻貓都完全相同。
+            還需要考慮環境、光線、個體差異與當下情境。
+          </p>
+
+        </div>
+
+      `;
+
+
+      setTimeout(
+        function () {
+
+          result.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+
+        },
+        100
+      );
+
+    }
+
+
+    /* =========================================================
+       11. 產生測驗
+    ========================================================== */
+
+    function renderQuiz() {
+
+      const quiz =
+        quizDB[currentQuiz];
+
+      const card =
+        document.getElementById("quizCard");
+
+
+      quizAnswered = false;
+
+
+      document.getElementById(
+        "quizProgressText"
+      ).textContent =
+        "第 " +
+        (currentQuiz + 1) +
+        " / " +
+        quizDB.length +
+        " 題";
+
+
+      document.getElementById(
+        "quizScore"
+      ).textContent =
+        "得分 " +
+        quizScore;
+
+
+      document.getElementById(
+        "quizProgressBar"
+      ).style.width =
+        (
+          (currentQuiz + 1) /
+          quizDB.length *
+          100
+        ) + "%";
+
+
+      let optionsHTML = "";
+
+
+      quiz.options.forEach(
+        function (option, index) {
+
+          const letter =
+            String.fromCharCode(
+              65 + index
+            );
+
+
+          optionsHTML += `
+
+            <button
+              type="button"
+              class="
+                quiz-option
+                w-full
+                rounded-2xl
+                border-2 border-orange-100
+                bg-cream
+                px-4 py-4
+                text-left
+                font-bold
+              "
+              onclick="
+                answerQuiz(
+                  ${index},
+                  this
+                )
+              "
+            >
+              <span
+                class="
+                  inline-flex
+                  w-8 h-8
+                  items-center justify-center
+                  rounded-full
+                  bg-white
+                  mr-2
+                  text-caramel
+                  font-black
+                "
+              >
+                ${letter}
+              </span>
+
+              ${option}
+
+            </button>
+
+          `;
+
+        }
+      );
+
+
+      card.innerHTML = `
+
+        <div class="fade-in">
+
+          <div
+            class="
+              flex
+              items-center
+              gap-4
+            "
+          >
+
+            <div
+              class="
+                w-16 h-16
+                rounded-2xl
+                bg-caramelLight
+                flex items-center justify-center
+                text-4xl
+              "
+            >
+              ${quiz.icon}
+            </div>
+
+            <div>
+
+              <p
+                class="
+                  text-xs
+                  font-black
+                  text-caramel
+                  tracking-widest
+                "
+              >
+                情境觀察
+              </p>
+
+              <h3
+                class="
+                  text-lg
+                  font-black
+                "
+              >
+                ${quiz.scene}
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <h4
+            class="
+              mt-6
+              text-xl sm:text-2xl
+              font-black
+              leading-relaxed
+            "
+          >
+            ${quiz.question}
+          </h4>
+
+
+          <div
+            class="
+              mt-6
+              space-y-3
+            "
+          >
+            ${optionsHTML}
+          </div>
+
+
+          <div
+            id="quizFeedback"
+            class="hidden mt-5"
+          >
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       12. 回答測驗
+    ========================================================== */
+
+    function answerQuiz(
+      selectedIndex,
+      element
+    ) {
+
+      if (quizAnswered) {
+        return;
+      }
+
+
+      quizAnswered = true;
+
+
+      const quiz =
+        quizDB[currentQuiz];
+
+
+      const buttons =
+        document.querySelectorAll(
+          ".quiz-option"
+        );
+
+
+      buttons.forEach(
+        function (button, index) {
+
+          button.disabled = true;
+
+
+          if (
+            index === quiz.answer
+          ) {
+
+            button.classList.add(
+              "correct"
+            );
+
+          }
+
+        }
+      );
+
+
+      const correct =
+        selectedIndex ===
+        quiz.answer;
+
+
+      if (correct) {
+
+        quizScore += 1;
+
+      }
+
+      else {
+
+        element.classList.add(
+          "wrong"
+        );
+
+      }
+
+
+      document.getElementById(
+        "quizScore"
+      ).textContent =
+        "得分 " +
+        quizScore;
+
+
+      const feedback =
+        document.getElementById(
+          "quizFeedback"
+        );
+
+
+      feedback.classList.remove(
+        "hidden"
+      );
+
+
+      feedback.innerHTML = `
+
+        <div
+          class="
+            rounded-2xl
+            ${
+              correct
+                ? "bg-sageLight"
+                : "bg-red-50"
+            }
+            p-5
+          "
+        >
+
+          <h4
+            class="
+              text-lg
+              font-black
+              ${
+                correct
+                  ? "text-green-700"
+                  : "text-red-700"
+              }
+            "
+          >
+            ${
+              correct
+                ? "🎉 翻譯成功！"
+                : "🐾 再觀察一下！"
+            }
+          </h4>
+
+
+          <p
+            class="
+              mt-2
+              leading-relaxed
+              text-brownLight
+            "
+          >
+            ${quiz.explanation}
+          </p>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="
+            mt-4
+            w-full
+            rounded-2xl
+            bg-coffee
+            text-white
+            px-5 py-4
+            font-black
+          "
+          onclick="nextQuiz(this)"
+        >
+          ${
+            currentQuiz <
+            quizDB.length - 1
+              ? "下一個情境 →"
+              : "查看挑戰結果 →"
+          }
+        </button>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       13. 下一題
+    ========================================================== */
+
+    function nextQuiz(element) {
+
+      if (
+        currentQuiz <
+        quizDB.length - 1
+      ) {
+
+        currentQuiz += 1;
+
+        renderQuiz();
+
+      }
+
+      else {
+
+        showQuizResult();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       14. 測驗結果
+    ========================================================== */
+
+    function showQuizResult() {
+
+      const card =
+        document.getElementById("quizCard");
+
+
+      let emoji = "";
+
+      let title = "";
+
+      let message = "";
+
+
+      if (quizScore === 3) {
+
+        emoji = "🏆";
+
+        title = "金牌喵語翻譯員！";
+
+        message =
+          "三個情境全部判斷正確！你已經很會從多個身體訊號觀察貓咪的感受了。";
+
+      }
+
+      else if (quizScore === 2) {
+
+        emoji = "😺";
+
+        title = "很會看喵臉色！";
+
+        message =
+          "表現很不錯！再多觀察耳朵、尾巴和整體姿勢，你會越來越懂貓咪。";
+
+      }
+
+      else {
+
+        emoji = "🐾";
+
+        title = "喵語學習中！";
+
+        message =
+          "沒關係！回到前面的情緒翻譯所再看看不同訊號，很快就會越來越熟悉。";
+
+      }
+
+
+      card.innerHTML = `
+
+        <div
+          class="
+            fade-in
+            text-center
+            py-5
+          "
+        >
+
+          <div class="text-7xl">
+            ${emoji}
+          </div>
+
+
+          <p
+            class="
+              mt-4
+              text-sm
+              font-black
+              text-caramel
+              tracking-widest
+            "
+          >
+            挑戰完成
+          </p>
+
+
+          <h3
+            class="
+              mt-2
+              text-3xl
+              font-black
+            "
+          >
+            ${title}
+          </h3>
+
+
+          <p
+            class="
+              mt-3
+              text-xl
+              font-black
+              text-caramel
+            "
+          >
+            ${quizScore} / ${quizDB.length} 題答對
+          </p>
+
+
+          <p
+            class="
+              mt-4
+              max-w-xl
+              mx-auto
+              leading-relaxed
+              text-brownLight
+            "
+          >
+            ${message}
+          </p>
+
+
+          <button
+            type="button"
+            class="
+              mt-7
+              w-full sm:w-auto
+              rounded-2xl
+              bg-caramel
+              text-white
+              px-8 py-4
+              font-black
+            "
+            onclick="restartQuiz(this)"
+          >
+            ↻ 再挑戰一次
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* =========================================================
+       15. 重新開始測驗
+    ========================================================== */
+
+    function restartQuiz(element) {
+
+      currentQuiz = 0;
+
+      quizScore = 0;
+
+      quizAnswered = false;
+
+      renderQuiz();
+
+    }
+
+  </script>
+
+</body>
+</html>
